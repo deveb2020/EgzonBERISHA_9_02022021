@@ -1,13 +1,46 @@
-import { screen } from "@testing-library/dom";
+import {
+  screen,
+  fireEvent,
+  waitForElementToBeRemoved,
+} from "@testing-library/dom";
+import { localStorageMock } from "../__mocks__/localStorage.js";
 import NewBillUI from "../views/NewBillUI.js";
 import NewBill from "../containers/NewBill.js";
+import firestore from "../app/Firestore";
+import firebase from "../__mocks__/firebase";
 
 describe("Given I am connected as an employee", () => {
   describe("When I am on NewBill Page and I add an image file (jpg, jpeg or png)", () => {
     test("Then I should add this new file to the firestore", () => {
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname });
+      };
+      Object.defineProperty(window, "localStorage", {
+        value: localStorageMock,
+      });
+      window.localStorage.setItem(
+        "user",
+        JSON.stringify({
+          type: "Employee",
+        })
+      );
       const html = NewBillUI();
       document.body.innerHTML = html;
-      //to-do write assertion
+      const newBill = new NewBill({
+        document,
+        onNavigate,
+        firestore,
+        localStorage: window.localStorage,
+      });
+      // const imgFile = "image.jpg";
+      // fireEvent.change(inputFile, { target: { value: imgFile } });
+      // console.log(newBill);
+      // expect(inputFile.value).toBe(imgFile);
+      const handleChangeFile = jest.fn((e) => newBill.handleChangeFile(e));
+      const inputFile = screen.getByTestId("file");
+      inputFile.addEventListener("change", handleChangeFile);
+      fireEvent.change(inputFile);
+      expect(handleChangeFile).toHaveBeenCalled();
     });
   });
 });
