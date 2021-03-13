@@ -38,10 +38,7 @@ export default class NewBill {
   handleSubmit = (e) => {
     e.preventDefault();
 
-    if (this.fileName === "invalid") {
-      alert("invalid file type");
-      return;
-    }
+    if (this.fileName === "invalid") return;
 
     const email = JSON.parse(localStorage.getItem("user")).email;
     const bill = {
