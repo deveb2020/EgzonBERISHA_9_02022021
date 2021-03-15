@@ -28,21 +28,20 @@ describe("Given I am connected as an employee", () => {
           type: "Employee",
         })
       );
-      const firestore = null;
       const html = NewBillUI();
       document.body.innerHTML = html;
 
       const newBill = new NewBill({
         document,
         onNavigate,
-        firestore,
+        firestore: null,
         localStorage: window.localStorage,
       });
-      // const handleChangeFile = jest.fn(newBill.handleChangeFile);
-      // const inputFile = screen.getByTestId("file");
-      // inputFile.addEventListener("change", handleChangeFile);
-      // fireEvent.change(inputFile);
-      // expect(handleChangeFile).toHaveBeenCalled();
+      const handleChangeFile = jest.fn(newBill.handleChangeFile);
+      const inputFile = screen.getByTestId("file");
+      inputFile.addEventListener("change", handleChangeFile);
+      fireEvent.change(inputFile);
+      expect(handleChangeFile).toHaveBeenCalled();
     });
   });
 });
@@ -58,7 +57,7 @@ describe("Given I am connected as an employee", () => {
 });
 
 describe("Given I am connected as an employee", () => {
-  describe("When I am on NewBill Page and I submit the form", () => {
+  describe("When I am on NewBill Page and I submit the form width an image (jpg, jpeg, png)", () => {
     test("Then it should create a new bill", () => {
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname });
@@ -93,10 +92,36 @@ describe("Given I am connected as an employee", () => {
 
 describe("Given I am connected as an employee", () => {
   describe("When I am on NewBill Page and I add a file other than an image (jpg, jpeg or png)", () => {
-    test("Then, Bills page should be rendered", () => {
+    test("Then, the bill shouldn't be created and I stay on the NewBill page", () => {
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname });
+      };
+      Object.defineProperty(window, "localStorage", {
+        value: localStorageMock,
+      });
+      window.localStorage.setItem(
+        "user",
+        JSON.stringify({
+          type: "Employee",
+        })
+      );
+      const firestore = null;
       const html = NewBillUI();
       document.body.innerHTML = html;
-      //to-do write assertion
+
+      const newBill = new NewBill({
+        document,
+        onNavigate,
+        firestore,
+        localStorage: window.localStorage,
+      });
+      const handleSubmit = jest.fn(newBill.handleSubmit);
+      newBill.fileName = "invalid";
+      const submitBtn = screen.getByTestId("form-new-bill");
+      submitBtn.addEventListener("submit", handleSubmit);
+      fireEvent.submit(submitBtn);
+      expect(handleSubmit).toHaveBeenCalled();
+      expect(screen.getAllByText("Envoyer une note de frais")).toBeTruthy();
     });
   });
 });

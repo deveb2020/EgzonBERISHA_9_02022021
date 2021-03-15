@@ -26,14 +26,19 @@ export default class NewBill {
     const extension = fileName.split(".").pop();
     const matchExtension = extension.toLowerCase().match(extensionCheck);
 
-    this.firestore.storage
-      .ref(`justificatifs/${fileName}`)
-      .put(file)
-      .then((snapshot) => snapshot.ref.getDownloadURL())
-      .then((url) => {
-        this.fileUrl = url;
-        this.fileName = matchExtension ? fileName : "invalid";
-      });
+    this.handleFirestoreStorage(fileName, file, matchExtension);
+  };
+  handleFirestoreStorage = (fileName, file, matchExtension) => {
+    if (this.firestore) {
+      this.firestore.storage
+        .ref(`justificatifs/${fileName}`)
+        .put(file)
+        .then((snapshot) => snapshot.ref.getDownloadURL())
+        .then((url) => {
+          this.fileUrl = url;
+          this.fileName = matchExtension ? fileName : "invalid";
+        });
+    }
   };
   handleSubmit = (e) => {
     e.preventDefault();
