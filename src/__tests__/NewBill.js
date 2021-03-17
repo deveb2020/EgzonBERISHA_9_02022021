@@ -14,8 +14,8 @@ import { ROUTES, ROUTES_PATH } from "../constants/routes";
 jest.mock("../app/Firestore");
 
 describe("Given I am connected as an employee", () => {
-  describe("When I am on NewBill Page and I add an image file (jpg, jpeg or png)", () => {
-    test("Then I should add this new file to the firestore", () => {
+  describe("When I am on NewBill Page and I add an image file", () => {
+    test("Then this new file should have been changed in the input file", () => {
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname });
       };
@@ -40,18 +40,13 @@ describe("Given I am connected as an employee", () => {
       const handleChangeFile = jest.fn(newBill.handleChangeFile);
       const inputFile = screen.getByTestId("file");
       inputFile.addEventListener("change", handleChangeFile);
-      fireEvent.change(inputFile);
+      fireEvent.change(inputFile, {
+        target: {
+          files: [new File(["image.png"], "image.png", { type: "image/png" })],
+        },
+      });
       expect(handleChangeFile).toHaveBeenCalled();
-    });
-  });
-});
-
-describe("Given I am connected as an employee", () => {
-  describe("When I am on NewBill Page and I add a file other than an image (jpg, jpeg or png)", () => {
-    test("Then the file shouldn't be added to the firestore", () => {
-      const html = NewBillUI();
-      document.body.innerHTML = html;
-      //to-do write assertion
+      expect(inputFile.files[0].name).toBe("image.png");
     });
   });
 });
