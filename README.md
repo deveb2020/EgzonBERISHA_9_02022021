@@ -10,7 +10,7 @@ The purpose of this project was to get familiar with automated tests, this proje
 
 Clonez le projet :
 ```
-$ git clone https://github.com/OpenClassrooms-Student-Center/Billed-app-FR.git
+$ git clone https://github.com/deveb2020/EgzonBERISHA_9_02022021.git
 ```
 
 Allez au repo cloné :
