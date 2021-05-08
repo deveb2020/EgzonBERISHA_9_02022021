@@ -15,7 +15,7 @@ $ git clone https://github.com/deveb2020/EgzonBERISHA_9_02022021.git
 
 Allez au repo cloné :
 ```
-$ cd Billed-app-FR
+$ cd EgzonBERISHA_9_02022021
 ```
 
 Installez les packages npm (décrits dans `package.json`) :
