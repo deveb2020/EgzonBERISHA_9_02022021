@@ -1,3 +1,11 @@
+# Billed - P9
+
+_Write unit tests, integration tests, E2E tests to keep the project without errors at anytime_
+
+## Purpose of the project
+
+The purpose of this project was to get familiar with automated tests, this project is fully covered with automated tests.
+
 **Comment lancer l'application en local** :
 
 Clonez le projet :
